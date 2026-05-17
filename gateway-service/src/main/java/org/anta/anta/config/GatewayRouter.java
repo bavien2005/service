@@ -27,7 +27,11 @@ public class GatewayRouter {
 
     public void registerRoutes(@Observes Router router) {
         // Quan trọng: phải có BodyHandler trước khi đọc body trong proxy
-        router.route().order(-120).handler(BodyHandler.create());
+        router.route().order(-120).handler(
+                BodyHandler.create()
+                        .setHandleFileUploads(true)
+                        .setBodyLimit(200L * 1024L * 1024L)
+        );
 
         router.route().order(-110).handler(corsResponseNormalizationFilter);
         router.route().order(-100).handler(authFilter);
